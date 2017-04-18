@@ -1,0 +1,19 @@
+{
+  "name": "yelp-camp",
+  "version": "1.0.0",
+  "description": "yelp camp application to go along with the web developer bootcamp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Exellin/yelp-camp.git"
+  },
+  "author": "Exellin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Exellin/yelp-camp/issues"
+  },
+  "homepage": "https://github.com/Exellin/yelp-camp#readme"
+}
