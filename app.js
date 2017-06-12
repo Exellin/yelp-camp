@@ -69,7 +69,7 @@ app.get("/campgrounds/:id", function(request, response) {
   });
 });
 
-app.get("/campgrounds/:id/comments/new", function(request, response) {
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response) {
   Campground.findById(request.params.id, function(err, campground) {
     if (err) {
       console.log(err);
@@ -79,7 +79,7 @@ app.get("/campgrounds/:id/comments/new", function(request, response) {
   });
 });
 
-app.post("/campgrounds/:id/comments", function(request, response) {
+app.post("/campgrounds/:id/comments", isLoggedIn, function(request, response) {
   Campground.findById(request.params.id, function(err, campground) {
     if (err) {
       console.log(err);
@@ -130,6 +130,13 @@ app.get("/logout", function(request, response) {
   request.logout();
   response.redirect("/campgrounds");
 });
+
+function isLoggedIn(request, response, next) {
+  if (request.isAuthenticated()) {
+    return next();
+  }
+  response.redirect("/login");
+}
 
 app.listen(process.env.PORT, process.env.IP, function() {
   console.log("Server started");
