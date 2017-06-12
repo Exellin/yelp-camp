@@ -27,12 +27,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.get("/", function(request, response){
+app.get("/", function(request, response) {
   response.render("landing");
 });
 
-app.get("/campgrounds", function(request, response){
-  Campground.find({}, function(err, campgrounds){
+app.get("/campgrounds", function(request, response) {
+  Campground.find({}, function(err, campgrounds) {
     if(err) {
       console.log(err);
     } else {
@@ -46,7 +46,7 @@ app.post("/campgrounds", function(request, response) {
   var image = request.body.image;
   var description = request.body.description;
   var campground = {name: name, image: image, description: description};
-  Campground.create(campground, function(err, campground){
+  Campground.create(campground, function(err, campground) {
     if (err) {
       console.log(err);
     } else {
@@ -60,7 +60,7 @@ app.get("/campgrounds/new", function(request, response) {
 });
 
 app.get("/campgrounds/:id", function(request, response) {
-  Campground.findById(request.params.id).populate("comments").exec(function(err, campground){
+  Campground.findById(request.params.id).populate("comments").exec(function(err, campground) {
     if (err) {
       console.log(err);
     } else {
@@ -98,6 +98,39 @@ app.post("/campgrounds/:id/comments", function(request, response) {
   });
 });
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.get("/login", function(request, response) {
+  response.render("login");
+});
+
+app.post("/login", passport.authenticate("local",
+  {
+    successRedirect: "/campgrounds",
+    failureRedirect: "/login"
+  }), function(request, response) {
+});
+
+app.get("/register", function(request, response) {
+  response.render("register");
+});
+
+app.post("/register", function(request, response) {
+  var newUser = new User({username: request.body.username});
+  User.register(newUser, request.body.password, function(err, user) {
+    if (err) {
+      console.log(err);
+      return response.render("register");
+    }
+    passport.authenticate("local")(request, response, function() {
+      response.redirect("/campgrounds");
+    });
+  });
+});
+
+app.get("/logout", function(request, response) {
+  request.logout();
+  response.redirect("/campgrounds");
+});
+
+app.listen(process.env.PORT, process.env.IP, function() {
   console.log("Server started");
 })
