@@ -64,6 +64,16 @@ router.put("/:id", function(request, response) {
   });
 });
 
+router.delete("/:id", function(request, response) {
+  Campground.findByIdAndRemove(request.params.id, function(err) {
+    if (err) {
+      response.redirect("/campgrounds");
+    } else {
+      response.redirect("/campgrounds");
+    }
+  });
+});
+
 function isLoggedIn(request, response, next) {
   if (request.isAuthenticated()) {
     return next();
